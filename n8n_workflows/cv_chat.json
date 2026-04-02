@@ -1,0 +1,189 @@
+{
+  "name": "STEP3: ChatBot",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "070c1308-c6ab-4fe7-b503-3837bad0c3cf",
+      "name": "When chat message received",
+      "webhookId": "38bac4b5-5f9c-4af2-880b-84cc3deaa822"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a CV screening assistant with access to a database of real candidate CVs.\n\nSTRICT RULES:\n- ONLY provide information that is explicitly written in the CV text provided to you\n- NEVER invent, assume or infer skills that are not literally mentioned in the CV\n- If a skill is not explicitly mentioned in the retrieved CV text, say \"No candidates with that skill were found in the database\"\n- Always quote the exact part of the CV where you found the information\n- For names and contact info, extract them from the beginning of the CV text\n- If multiple candidates match, list all of them\n\nWhen you find a match, ALWAYS respond like this:\ncandidate name CV:\n- Relevant text: [exact quote from CV]\n- Contact: [email and phone if available]\"\n\nIf no match found, say exactly: \"No candidates with experience in [skill] were found in the CV database.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "49e3cfd1-8b94-4533-835e-837db8139373",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        208
+      ],
+      "id": "0d08e45a-01b2-4b4b-9208-54e3d0ae7500",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "hoegSCVOPIF418TL",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "246e04dd-7476-4d88-9058-78f582b66dfd",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this to search information about candidates and CVs",
+        "tableName": {
+          "__rl": true,
+          "value": "cv_documents",
+          "mode": "list",
+          "cachedResultName": "cv_documents"
+        },
+        "topK": 10,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        560,
+        0
+      ],
+      "id": "35a04fa8-79f9-43b9-abe1-e2923e676a98",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "7Rs85pEPISMcNpjl",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        656,
+        208
+      ],
+      "id": "c7329e73-6498-4af7-a408-9ca4f90e3e85",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "hoegSCVOPIF418TL",
+          "name": "OpenAI account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "825b2490-597c-4366-ba92-02efdb3912cf",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "afd133f0ddc1d8a1cb2fd049ab73286289e28ebc87f93d33f5b49e5d66317b98"
+  },
+  "id": "KzpDdIF3adu2BMCO",
+  "tags": []
+}
