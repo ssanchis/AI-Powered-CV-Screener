@@ -1,5 +1,5 @@
 {
-  "name": "STEP3: ChatBot",
+  "name": "cv_chat",
   "nodes": [
     {
       "parameters": {
@@ -19,7 +19,7 @@
     {
       "parameters": {
         "options": {
-          "systemMessage": "You are a CV screening assistant with access to a database of real candidate CVs.\n\nSTRICT RULES:\n- ONLY provide information that is explicitly written in the CV text provided to you\n- NEVER invent, assume or infer skills that are not literally mentioned in the CV\n- If a skill is not explicitly mentioned in the retrieved CV text, say \"No candidates with that skill were found in the database\"\n- Always quote the exact part of the CV where you found the information\n- For names and contact info, extract them from the beginning of the CV text\n- If multiple candidates match, list all of them\n\nWhen you find a match, ALWAYS respond like this:\ncandidate name CV:\n- Relevant text: [exact quote from CV]\n- Contact: [email and phone if available]\"\n\nIf no match found, say exactly: \"No candidates with experience in [skill] were found in the CV database.\""
+          "systemMessage": "You are a CV screening assistant with access to a database of real candidate CVs.\n\nSTRICT RULES:\n- ONLY provide information that is explicitly written in the CV text provided to you\n- NEVER invent, assume or infer skills that are not literally mentioned in the CV\n- If a skill is not explicitly mentioned in the retrieved CV text, say \"No candidates with that skill were found in the database\"\n- Always quote the exact part of the CV where you found the information\n- If multiple candidates match, list all of them\n- ALWAYS provide NAMES and CONTACT INFORMATION\n\nIf NO MATCH found, say exactly: \"No candidates with experience in [skill] were found in the CV database.\""
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -78,7 +78,7 @@
           "mode": "list",
           "cachedResultName": "cv_documents"
         },
-        "topK": 10,
+        "topK": 20,
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
@@ -179,7 +179,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "825b2490-597c-4366-ba92-02efdb3912cf",
+  "versionId": "aed7c4e4-9841-44e5-895b-e91672780299",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "afd133f0ddc1d8a1cb2fd049ab73286289e28ebc87f93d33f5b49e5d66317b98"

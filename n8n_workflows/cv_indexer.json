@@ -89,7 +89,24 @@
       "parameters": {
         "jsonMode": "expressionData",
         "jsonData": "={{ $json.text }}",
-        "options": {}
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "name",
+                "value": "={{ $('Read CVs').item.json.fileName }}"
+              },
+              {
+                "name": "email",
+                "value": "={{ $json.text.match(/[\\w.-]+@[\\w.-]+\\.\\w+/)?.[0] \n\n '' }}"
+              },
+              {
+                "name": "phone",
+                "value": "={{ $json.text.match(/[\\+\\d][\\d\\s\\-]{7,}/)?.[0] \n\n '' }}"
+              }
+            ]
+          }
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "typeVersion": 1.1,
@@ -164,7 +181,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "afbe2f02-6065-4406-b4cf-576d49acbc5c",
+  "versionId": "016444d5-ee3b-4756-828c-993ab73f06ac",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "afd133f0ddc1d8a1cb2fd049ab73286289e28ebc87f93d33f5b49e5d66317b98"
