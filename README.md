@@ -33,7 +33,7 @@ The system retrieves the most semantically relevant CV chunks and answers based 
 │  (runs on every message)                             │
 │                                                      │
 │  User Question → Embed → Supabase similarity search │
-│       → Retrieve top 10 chunks → GPT-4o-mini        │
+│       → Retrieve top 20 chunks → GPT-4o-mini        │
 │       → Answer grounded in CV data                  │
 └─────────────────────────────────────────────────────┘
 ```
